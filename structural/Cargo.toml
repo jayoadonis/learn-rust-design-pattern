@@ -1,0 +1,10 @@
+[package]
+name = "structural"
+version = "0.0.0"
+edition = "2021"
+
+[[bin]]
+name="adapter"
+path="adapter/src/main/main_exe.rs"
+
+
