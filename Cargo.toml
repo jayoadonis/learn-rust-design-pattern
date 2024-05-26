@@ -1,0 +1,6 @@
+[workspace]
+members=[
+    "structural",
+    "behavioral",
+    "creational"
+]
