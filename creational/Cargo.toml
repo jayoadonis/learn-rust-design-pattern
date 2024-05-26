@@ -1,0 +1,9 @@
+[package]
+name="creational"
+version="0.0.0"
+edition="2021"
+
+
+[[bin]]
+name="factory"
+path="factory/src/main/main_exe.rs"
