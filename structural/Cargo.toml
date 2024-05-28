@@ -8,3 +8,5 @@ name="adapter"
 path="adapter/src/main/main_exe.rs"
 
 
+[dependencies]
+rand = "0.8.5"
