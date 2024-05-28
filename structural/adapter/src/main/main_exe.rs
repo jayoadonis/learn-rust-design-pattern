@@ -10,10 +10,19 @@ use rand::{ Rng, rngs::ThreadRng };
 
 mod util;
 mod model;
+use crate::model::adapater_into_ii_pin::AdapterIntoIIPin;
 use crate::model::entity::Entity;
+use crate::model::i_three_pin::IThreePin;
+use crate::model::i_two_pin::ITwoPin;
+use crate::model::plug_i::PlugI;
+use crate::model::plug_ii::PlugII;
 
 pub fn main() -> Result<(), usize> {
     println!("Adapter DP.");
+
+    let old_plug: Box<dyn ITwoPin> = Box::new(PlugI::default());
+    let new_plug: Box<dyn IThreePin> = Box::new(PlugII::default());
+    let adap_plug: Box<dyn ITwoPin> = Box::new(AdapterIntoIIPin::new(new_plug));
 
     let mut rng: ThreadRng = rand::thread_rng();
 
