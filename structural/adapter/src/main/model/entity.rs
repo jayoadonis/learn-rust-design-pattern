@@ -78,18 +78,22 @@ impl Entity {
         &self.id
     }
 
-    pub fn hash_code_64(&self) -> u64 {
+    pub fn hash_code_usize(&self) -> usize {
         let mut hasher = DefaultHasher::new();
         self.hash(&mut hasher);
-        hasher.finish()
+        hasher.finish() as usize
     }
 
     pub fn hash_code(&self) -> u32 {
-        ((self.hash_code_64() & 0xFFFF_FFFF) as u32)
+        ((self.hash_code_usize() & 0xFFFF_FFFF) as u32)
     }
 
     pub fn hash_str(&self) -> String {
         format!("{:x}", self.hash_code() )
+    }
+
+    pub fn to_string(&self) -> String {
+        return format!("{:?}", self );
     }
 }
 
@@ -103,7 +107,7 @@ impl fmt::Display for Entity {
 //REM: Implementing Debug trait for Entity
 impl fmt::Debug for Entity {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}@{:x}[id='{}', name='{}']", std::any::type_name::<Self>(), self.hash_code_64(), self.id, self.name)
+        write!(f, "{}@{:x}[id='{}', name='{}']", std::any::type_name::<Self>(), self.hash_code_usize(), self.id, self.name)
     }
 }
 
