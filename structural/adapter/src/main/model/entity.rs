@@ -12,7 +12,7 @@ use crate::util::value::Value;
 //     }
 // }
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct Entity {
     id: String,
     name: String,
@@ -32,13 +32,14 @@ impl Entity {
     //REM: Constructor with id and name parameters
     pub fn new_with_id_and_name(id: Option<&str>, name: Option<&str>) -> Self {
         let id = match id {
-            Some(id_str) if !id_str.trim().is_empty() => id_str.to_string(),
-            _ => Value::WAITING.value.to_string(),
+            Some(id_str) if !id_str.trim().is_empty() => id_str,
+            _ => Value::WAITING.value,
         };
         let mut entity = Self {
-            id,
+            id: id.to_string(),
             name: String::new(),
         };
+
         entity.init(name);
         entity
     }
