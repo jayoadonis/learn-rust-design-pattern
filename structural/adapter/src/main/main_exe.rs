@@ -2,6 +2,8 @@
 #![allow(unused)]
 #![allow(dead_code)]
 
+use std::any::Any;
+use std::ops::DerefMut;
 use std::time::Instant;
 use std::time::UNIX_EPOCH;
 use std::time::SystemTime;
@@ -20,9 +22,24 @@ use crate::model::plug_ii::PlugII;
 pub fn main() -> Result<(), usize> {
     println!("Adapter DP.");
 
-    let old_plug: Box<dyn ITwoPin> = Box::new(PlugI::default());
-    let new_plug: Box<dyn IThreePin> = Box::new(PlugII::default());
-    let adap_plug: Box<dyn ITwoPin> = Box::new(AdapterIntoIIPin::new(new_plug));
+    let mut old_plug: Box<dyn ITwoPin> = Box::new(PlugI::default());
+    let mut new_plug: Box<dyn IThreePin> = Box::new(PlugII::default());
+    let mut adap_plug: Box<dyn ITwoPin> = Box::new(AdapterIntoIIPin::new(Box::new(&*new_plug)));
+
+    let mut y  = &adap_plug;
+    let mut y  = &mut adap_plug;
+    let mut y1  = &*(adap_plug);
+    let mut y2 = &mut *(adap_plug);
+
+    let mut z: &mut dyn ITwoPin = &mut PlugI::default();
+    let mut z1: &mut dyn IThreePin = &mut PlugII::default();
+    let mut z2: &mut dyn ITwoPin = &mut AdapterIntoIIPin::new( Box::new(z1) );
+
+    // let z2x = &mut z2.as_any().downcast_ref::<AdapterIntoIIPin>().expect("Cannot down cast ITwoPin into AdapterIntoIIPin");;
+
+    println!("::: {:?}", z2.pin() );
+    println!("::: {:?}", z2.pin_i() );
+    // println!("::: {:?}", z2x.get_adaptee().pin_ii() );
 
     let mut rng: ThreadRng = rand::thread_rng();
 
@@ -41,9 +58,15 @@ pub fn main() -> Result<(), usize> {
     let start_system_time: u64 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
 
     
+    let mut entity_i: &Entity = &Entity::default();
+    let mut entity_ii: &Entity = &Entity::default();
     for (i, entity)  in entities.iter().enumerate() {
-        println!("Entity {}: {}", i + 1, entity.to_string());
+        println!("Entity {}: {}", i + 1, entity);
+        entity_i = entity;
+        entity_ii = entity;
     }
+    println!("e_i = {}", entity_i);
+    println!("e_ii = {}", entity_ii);
 
     let duration: Duration = start.elapsed();
     let end_system_time: u64 = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
